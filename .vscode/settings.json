@@ -1,0 +1,22 @@
+{
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"editor.fontSize": 12,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+
+	"editor.quickSuggestions": {
+		"strings": "on"
+	},
+
+	"cSpell.words": ["chielorenz", "tailwindcss"],
+
+	"html.autoClosingTags": false,
+	"javascript.autoClosingTags": false,
+	"typescript.autoClosingTags": false
+}
