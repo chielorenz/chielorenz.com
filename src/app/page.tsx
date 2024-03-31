@@ -1,5 +1,5 @@
 import Image from "next/image";
-import avatarPic from "@/app/avatar.png";
+import avatarPic from "@/app/avatar.webp";
 import Button from "@/components/Button";
 import type { PostMeta } from "@/app/api/posts/route";
 import { format } from "@/lib/date";
@@ -75,7 +75,7 @@ export default async function Home() {
 						</div>
 						{/* Add custom placeholder image because the avatar has transparent background: <placeholder="blur"
 					blurDataURL={string}> */}
-						<Image src={avatarPic} alt="Author avatar" />
+						<Image src={avatarPic} height={260} alt="Author avatar" />
 					</div>
 				</div>
 				{/* <div className="m-auto max-w-screen-xl mt-32 mb-16">
