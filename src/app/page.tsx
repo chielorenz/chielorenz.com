@@ -48,10 +48,10 @@ export default async function Home() {
 	);
 
 	return (
-		<div className="h-screen bg-havelock-500">
-			<div className="h-screen p-8">
-				<div className="h-full bg-shark-950 rounded-2xl flex">
-					<div className="w-full max-w-screen-xl m-auto flex justify-evenly items-center">
+		<div className="bg-havelock-500">
+			<div className="h-screen sm:p-4">
+				<div className="h-full bg-shark-950 sm:rounded-2xl flex">
+					<div className="w-full max-w-screen-xl m-auto gap-4 px-8 flex justify-evenly items-center">
 						<div className="text-lg leading-8">
 							<p>Hello, my name is</p>
 							<h1 className="font-bold text-5xl text-havelock-500 mt-3">
@@ -75,15 +75,20 @@ export default async function Home() {
 						</div>
 						{/* Add custom placeholder image because the avatar has transparent background: <placeholder="blur"
 					blurDataURL={string}> */}
-						<Image src={avatarPic} height={260} alt="Author avatar" />
+						<Image
+							className="hidden md:block"
+							src={avatarPic}
+							height={200}
+							alt="Author avatar"
+						/>
 					</div>
 				</div>
 				{/* <div className="m-auto max-w-screen-xl mt-32 mb-16">
-				<h1 className="font-bold text-lg">Latest posts</h1>
-				<div className="mt-8 grid grid-cols-3 grid-rows-[180px_180px] gap-6">
-					{posts}
-				</div>
-			</div> */}
+					<h1 className="font-bold text-lg">Latest posts</h1>
+					<div className="mt-8 grid grid-cols-3 grid-rows-[180px_180px] gap-6">
+						{posts}
+					</div>
+				</div> */}
 			</div>
 		</div>
 	);
