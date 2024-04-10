@@ -4,6 +4,7 @@ declare module "*.mdx" {
 		excerpt: string;
 		timestamp: string;
 		cover: string;
+		published: boolean;
 	}
 
 	export const meta: Meta;
