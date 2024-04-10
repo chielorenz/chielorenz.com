@@ -48,48 +48,47 @@ export default async function Home() {
 	);
 
 	return (
-		<div className="bg-havelock-500">
-			<div className="h-screen sm:p-4">
-				<div className="h-full bg-shark-950 sm:rounded-2xl flex">
-					<div className="w-full max-w-screen-xl m-auto gap-4 px-8 flex justify-evenly items-center">
-						<div className="text-lg leading-8">
-							<p>Hello, my name is</p>
-							<h1 className="font-bold text-5xl text-havelock-500 mt-3">
-								Luca Lorenzini
-							</h1>
-							<p className="mt-3">
-								Web developer working full-time{" "}
-								<a href="https://wethod.com">@wethod</a> and on many{" "}
-								<a href="https://github.com/chielorenz">side projects</a>
-							</p>
-							<p>
-								DIY supporter and{" "}
-								<a href="https://undiscover.it">music enthusiast</a>. My
-								internet handler is “chielorenz”
-							</p>
-							<div className="mt-8 flex space-x-2">
-								<Button label="Blog" href="/blog" />
-								{/* <Button label="Works" /> */}
-								{/* <Button label="Music" href="https://undiscover.it" /> */}
-							</div>
+		<>
+			<div className="h-screen flex">
+				<div className="w-full max-w-screen-xl m-auto gap-4 flex justify-evenly items-center">
+					<div className="text-lg leading-8">
+						<p>Hello, my name is</p>
+						<h1 className="font-bold text-5xl text-havelock-500 mt-3">
+							Luca Lorenzini
+						</h1>
+						<p className="mt-3">
+							Web developer working full-time{" "}
+							<a href="https://wethod.com">@wethod</a> and on many{" "}
+							<a href="https://github.com/chielorenz">side projects</a>
+						</p>
+						<p>
+							DIY supporter and{" "}
+							<a href="https://undiscover.it">music enthusiast</a>. My internet
+							handler is “chielorenz”
+						</p>
+						<div className="mt-8 flex space-x-2">
+							<Button label="Blog" href="/blog" />
+							{/* <Button label="Works" /> */}
+							{/* <Button label="Music" href="https://undiscover.it" /> */}
 						</div>
-						{/* Add custom placeholder image because the avatar has transparent background: <placeholder="blur"
+					</div>
+					{/* Add custom placeholder image because the avatar has transparent background: <placeholder="blur"
 					blurDataURL={string}> */}
-						<Image
-							className="hidden md:block"
-							src={avatarPic}
-							height={200}
-							alt="Author avatar"
-						/>
-					</div>
+					<Image
+						className="hidden md:block drop-shadow-[0_0_8px_rgba(0,0,0,0.5)]"
+						style={{ transform: "rotate(5deg)" }}
+						src={avatarPic}
+						height={220}
+						alt="Author avatar"
+					/>
 				</div>
-				{/* <div className="m-auto max-w-screen-xl mt-32 mb-16">
-					<h1 className="font-bold text-lg">Latest posts</h1>
-					<div className="mt-8 grid grid-cols-3 grid-rows-[180px_180px] gap-6">
-						{posts}
-					</div>
-				</div> */}
 			</div>
-		</div>
+			<div className="m-auto max-w-screen-xl mt-32 mb-16">
+				<h1 className="font-bold text-lg">Latest posts</h1>
+				<div className="mt-8 grid grid-cols-3 grid-rows-[180px_180px] gap-6">
+					{posts}
+				</div>
+			</div>
+		</>
 	);
 }
