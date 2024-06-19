@@ -3,7 +3,5 @@ export default async function PostLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	return (
-		<div className="mx-auto prose prose-invert prose-lg my-12">{children}</div>
-	);
+	return <div className="prose">{children}</div>;
 }

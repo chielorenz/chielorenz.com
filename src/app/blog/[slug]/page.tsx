@@ -2,8 +2,8 @@ import type { PostMeta } from "@/app/api/posts/route";
 import { format } from "@/lib/date";
 
 export default async function Post({ params }: { params: { slug: string } }) {
-	// Webpack need come information about static import path see https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import
-	const Post = await import(`@/posts/${params.slug}.mdx`); // TODO what is file is .md instead of .mdx?
+	// Webpack need some information about static import path see https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import
+	const Post = await import(`@/posts/${params.slug}.mdx`); // TODO what if file is .md instead of .mdx?
 	return (
 		<>
 			<p>Last updated {format(Post.meta.timestamp)}</p>

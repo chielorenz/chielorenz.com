@@ -1,28 +1,5 @@
 import Link from "next/link";
-
-const NavItem = ({
-	href,
-	children,
-}: {
-	href: string;
-	children: React.ReactNode;
-}) => (
-	<Link
-		href={href}
-		className="hover:no-underline text-havelock-100 font-semibold"
-	>
-		{children}
-	</Link>
-);
-
-const Nav = () => (
-	<div className="mt-8">
-		<div className="flex gap-4 no-underline">
-			<NavItem href="/">Home</NavItem>
-			<NavItem href="/blog">Blog</NavItem>
-		</div>
-	</div>
-);
+import Logo from "@/components/Logo";
 
 export default async function BlogLayout({
 	children,
@@ -30,8 +7,12 @@ export default async function BlogLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<section className="mx-auto max-w-screen-lg">
-			<Nav />
+		<section className="flex flex-col gap-4 mx-auto my-8 px-8 max-w-screen-sm">
+			<nav>
+				<Link href="/">
+					<Logo />
+				</Link>
+			</nav>
 			<div className="mt-8">{children}</div>
 		</section>
 	);

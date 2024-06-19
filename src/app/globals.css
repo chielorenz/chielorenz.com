@@ -1,13 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
-
-html {
-	background-color: theme(colors.shark.950);
-	color: theme(colors.shark.300);
-}
 a {
-	@apply text-havelock-500 hover:underline;
+	@apply underline;
 }

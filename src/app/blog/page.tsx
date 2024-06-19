@@ -6,13 +6,11 @@ const Post = (postMeta: PostMeta) => {
 	return (
 		<Link
 			href={postMeta.href}
-			className="hover:no-underline flex flex-col gap-2"
+			className="flex flex-col gap-2 items-start no-underline"
 		>
-			<p className="text-sm text-shark-300">{format(postMeta.timestamp)}</p>
-			<h1 className="font-semibold text-xl text-havelock-100">
-				{postMeta.title}
-			</h1>
-			<p className="text-shark-300">{postMeta.excerpt}</p>
+			<p className="text-sm">{format(postMeta.timestamp)}</p>
+			<h1 className="text-lg font-semibold">{postMeta.title}</h1>
+			<p>{postMeta.excerpt}</p>
 		</Link>
 	);
 };
@@ -27,5 +25,19 @@ export default async function Blog() {
 		posts.push(<Post key={postMeta.href} {...postMeta} />);
 	}
 
-	return <div className="mt-16 flex flex-col gap-16">{posts}</div>;
+	return (
+		<div className="flex flex-col gap-8">
+			{posts}
+			{posts}
+			{posts}
+			{posts}
+			{posts}
+			{posts}
+			{posts}
+			{posts}
+			{posts}
+			{posts}
+			{posts}
+		</div>
+	);
 }

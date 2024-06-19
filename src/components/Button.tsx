@@ -10,7 +10,8 @@ export default function Button({
 	href?: string;
 	children?: React.ReactNode;
 }) {
-	const className = `flex justify-center items-center font-bold text-sm bg-havelock-500/10 text-havelock-500 hover:bg-havelock-300/10 py-2 px-4 rounded hover:no-underline `;
+	const className =
+		"bg-black text-white py-0.5 px-2.5 rounded no-underline hover:no-underline";
 	return createElement(
 		href ? Link : "button",
 		{
