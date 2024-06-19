@@ -10,8 +10,7 @@ export default function Button({
 	href?: string;
 	children?: React.ReactNode;
 }) {
-	const className =
-		"bg-black text-white py-0.5 px-2.5 rounded no-underline hover:no-underline";
+	const className = "bg-black text-white py-0.5 px-2.5 rounded no-underline";
 	return createElement(
 		href ? Link : "button",
 		{

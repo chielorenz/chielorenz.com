@@ -4,14 +4,12 @@ import { format } from "@/lib/date";
 
 const Post = (postMeta: PostMeta) => {
 	return (
-		<Link
-			href={postMeta.href}
-			className="flex flex-col gap-2 items-start no-underline"
-		>
+		<div className="flex flex-col gap-2 items-start no-underline">
 			<p className="text-sm">{format(postMeta.timestamp)}</p>
 			<h1 className="text-lg font-semibold">{postMeta.title}</h1>
 			<p>{postMeta.excerpt}</p>
-		</Link>
+			<Link href={postMeta.href}>Read more</Link>
+		</div>
 	);
 };
 
@@ -25,19 +23,5 @@ export default async function Blog() {
 		posts.push(<Post key={postMeta.href} {...postMeta} />);
 	}
 
-	return (
-		<div className="flex flex-col gap-8">
-			{posts}
-			{posts}
-			{posts}
-			{posts}
-			{posts}
-			{posts}
-			{posts}
-			{posts}
-			{posts}
-			{posts}
-			{posts}
-		</div>
-	);
+	return <div className="flex flex-col gap-8">{posts}</div>;
 }

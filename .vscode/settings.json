@@ -14,7 +14,7 @@
 		"strings": "on"
 	},
 
-	"cSpell.words": ["chielorenz", "frontmatter", "tailwindcss"],
+	"cSpell.words": ["chielorenz", "frontmatter", "rehype", "tailwindcss"],
 
 	"html.autoClosingTags": false,
 	"javascript.autoClosingTags": false,

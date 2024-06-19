@@ -1,4 +1,3 @@
-const sharp = require("sharp");
 import path from "path";
 import { glob } from "glob";
 import { Meta } from ".mdx";

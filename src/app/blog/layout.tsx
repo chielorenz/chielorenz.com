@@ -7,7 +7,7 @@ export default async function BlogLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<section className="flex flex-col gap-4 mx-auto my-8 px-8 max-w-screen-sm">
+		<section className="flex flex-col gap-4 mx-auto my-8 px-8 max-w-screen-md">
 			<nav>
 				<Link href="/">
 					<Logo />
