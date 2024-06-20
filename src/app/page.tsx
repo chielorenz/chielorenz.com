@@ -3,7 +3,7 @@ import Logo from "@/components/Logo";
 
 export default async function Home() {
 	return (
-		<div className="h-screen flex p-8">
+		<div className="h-screen flex">
 			<div className="w-full max-w-screen-xl m-auto gap-4 flex justify-evenly">
 				<div className="leading-8">
 					<p>Hi, my name is</p>
