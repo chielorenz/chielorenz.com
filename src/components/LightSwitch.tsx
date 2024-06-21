@@ -14,7 +14,7 @@ export default function LightSwitch() {
 		style: { width: 16, height: 16 },
 	};
 	return (
-		<>
+		<div className="cursor-pointer">
 			<Image
 				{...commonProps}
 				src={sun.src}
@@ -27,6 +27,6 @@ export default function LightSwitch() {
 				onClick={() => setTheme("light")}
 				className="hidden dark:block"
 			/>
-		</>
+		</div>
 	);
 }
