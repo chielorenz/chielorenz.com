@@ -16,7 +16,7 @@ export default async function BlogLayout({
 				<Link href="/">
 					<Logo />
 				</Link>
-				<div className="flex gap-4">
+				<div className="flex gap-4 items-center">
 					<LightSwitch />
 					<GlipshToggle />
 				</div>
