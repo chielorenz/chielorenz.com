@@ -1,6 +1,6 @@
-<svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <mask id="path-1-inside-1_56_56" fill="white">
-<rect x="0.5" width="21" height="21" rx="3"/>
+<rect x="0.5" width="16" height="16" rx="2"/>
 </mask>
-<rect x="0.5" width="21" height="21" rx="3" stroke="#757575" stroke-width="8" mask="url(#path-1-inside-1_56_56)"/>
+<rect x="0.5" width="16" height="16" rx="2" stroke="#808080" stroke-width="6" mask="url(#path-1-inside-1_56_56)"/>
 </svg>

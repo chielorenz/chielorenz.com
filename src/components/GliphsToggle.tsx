@@ -10,10 +10,8 @@ export default function GliphsToggle() {
 
 	const commonProps = {
 		onClick: () => toggleGliphs(),
-		alt: "Gliphs toggle",
+		alt: "Toggle gliphs",
 		height: 16,
-		width: 16,
-		style: { width: 16, height: 16 },
 	};
 
 	return (
@@ -21,14 +19,18 @@ export default function GliphsToggle() {
 			<Image
 				{...commonProps}
 				src={toogle}
-				className="hidden gliphs:block gliphs:dark:hidden"
+				className="w-auto hidden gliphs:block gliphs:dark:hidden"
 			/>
 			<Image
 				{...commonProps}
 				src={toggleInverted}
-				className="hidden dark:gliphs:block"
+				className="w-auto hidden gliphs:dark:block"
 			/>
-			<Image {...commonProps} src={toggleDisabled} className="gliphs:hidden" />
+			<Image
+				{...commonProps}
+				src={toggleDisabled}
+				className="w-auto gliphs:hidden"
+			/>
 		</div>
 	);
 }
