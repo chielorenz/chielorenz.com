@@ -11,3 +11,24 @@
 a {
 	@apply underline;
 }
+
+.gliph {
+	position: fixed;
+	width: 16px;
+	height: 16px;
+	z-index: -1;
+	animation-name: wander;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-duration: var(--gliph-duration);
+}
+
+@keyframes wander {
+	0%,
+	100% {
+		transform: translate(0, 0) rotate(0);
+	}
+	50% {
+		transform: translate(var(--gliph-x), var(--gliph-y)) rotate(360deg);
+	}
+}

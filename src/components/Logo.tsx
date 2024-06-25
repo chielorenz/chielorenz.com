@@ -1,6 +1,6 @@
 import Image from "next/image";
 import logo from "@/images/logo.svg";
-import whiteLogo from "@/images/logo-white.svg";
+import logoInv from "@/images/logo-inverted.svg";
 
 export default function Logo() {
 	const commonProps = {
@@ -10,7 +10,7 @@ export default function Logo() {
 	return (
 		<>
 			<Image {...commonProps} src={logo} className="dark:hidden" />
-			<Image {...commonProps} src={whiteLogo} className="hidden dark:block" />
+			<Image {...commonProps} src={logoInv} className="hidden dark:block" />
 		</>
 	);
 }

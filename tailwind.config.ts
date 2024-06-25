@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
 	content: [
@@ -11,7 +12,12 @@ const config: Config = {
 			sans: ["Outfit", "sans-serif"],
 		},
 	},
-	plugins: [require("@tailwindcss/typography")],
+	plugins: [
+		require("@tailwindcss/typography"),
+		plugin(function ({ addVariant }) {
+			addVariant("gliphs", ".gliphs &");
+		}),
+	],
 	darkMode: "selector",
 };
 

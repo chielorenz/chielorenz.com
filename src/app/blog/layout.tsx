@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import Glipsh from "@/components/Gliphs";
 import LightSwitch from "@/components/LightSwitch";
+import GlipshToggle from "@/components/GliphsToggle";
 
 export default async function BlogLayout({
 	children,
@@ -9,11 +11,15 @@ export default async function BlogLayout({
 }) {
 	return (
 		<section className="flex flex-col gap-4 mx-auto my-8 px-8 max-w-screen-md">
+			<Glipsh />
 			<nav className="flex justify-between">
 				<Link href="/">
 					<Logo />
 				</Link>
-				<LightSwitch />
+				<div className="flex gap-4">
+					<LightSwitch />
+					<GlipshToggle />
+				</div>
 			</nav>
 			<div className="mt-8">{children}</div>
 		</section>
