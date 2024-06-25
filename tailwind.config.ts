@@ -15,7 +15,10 @@ const config: Config = {
 	plugins: [
 		require("@tailwindcss/typography"),
 		plugin(function ({ addVariant }) {
-			addVariant("gliphs", ".gliphs &");
+			addVariant("glyphs", [".glyphs &", ".glyphs&"]);
+			addVariant("no-glyphs", [".no-glyphs &", ".no-glyphs&"]);
+			addVariant("light", [".light &", ".light&"]);
+			addVariant("dark", [".dark &", ".dark&"]);
 		}),
 	],
 	darkMode: "selector",

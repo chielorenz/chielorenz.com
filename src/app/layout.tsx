@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
 import { type Metadata } from "next";
-import { ThemeProvider } from "next-themes";
-import { GliphsProvider } from "@/contexts/GliphsProvider";
-import ThemeScript from "@/components/ThemeScript";
+import { ThemeProvider, ThemeScripts } from "@/contexts/ThemeProvider";
+import Glypsh from "@/components/Glyphs";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,9 +13,10 @@ export default function Layout({ children }: { children: ReactNode }) {
 	return (
 		<html suppressHydrationWarning>
 			<body className="dark:bg-black dark:text-white">
-				<ThemeScript />
-				<ThemeProvider attribute="class">
-					<GliphsProvider>{children}</GliphsProvider>
+				<ThemeProvider>
+					<ThemeScripts />
+					<Glypsh />
+					{children}
 				</ThemeProvider>
 			</body>
 		</html>

@@ -1,13 +1,11 @@
 import Button from "@/components/Button";
 import Logo from "@/components/Logo";
-import Glipsh from "@/components/Gliphs";
 
 export default async function Home() {
 	return (
 		<div className="h-screen flex">
 			<section className="flex flex-col gap-4 mx-auto my-8 px-8 max-w-screen-md">
 				<div className="w-full max-w-screen-xl m-auto flex justify-evenly">
-					<Glipsh />
 					<div className="leading-8">
 						<p>Hi, my name is</p>
 						<div className="flex gap-4 mt-4 items-center">
