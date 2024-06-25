@@ -18,7 +18,7 @@ a {
 	height: 16px;
 	z-index: -1;
 	animation-name: wander;
-	animation-timing-function: linear;
+	animation-timing-function: ease;
 	animation-iteration-count: infinite;
 	animation-duration: var(--gliph-duration);
 }
