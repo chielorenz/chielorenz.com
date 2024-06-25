@@ -14,7 +14,6 @@ export default function Layout({ children }: { children: ReactNode }) {
 		<html suppressHydrationWarning>
 			<body className="dark:bg-black dark:text-white">
 				<ThemeProvider>
-					<ThemeScripts />
 					<Glypsh />
 					{children}
 				</ThemeProvider>

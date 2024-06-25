@@ -50,6 +50,51 @@ const areGlyphsSelected = (): boolean => {
 	}
 };
 
+const modeScript = () => {
+	try {
+		const systemMode = window.matchMedia("(prefers-color-scheme: light)")
+			.matches
+			? "light"
+			: "dark";
+		const value = localStorage.getItem("theme-mode");
+		const selectedMode = value !== null ? value : "system";
+		const resolvedMode = selectedMode === "system" ? systemMode : selectedMode;
+
+		if (resolvedMode === "light") {
+			document.documentElement.classList.add("light");
+		} else {
+			document.documentElement.classList.add("dark");
+		}
+	} catch (e) {
+		console.error("localStorage is not available", e);
+	}
+};
+
+const glyphsScript = () => {
+	try {
+		if (localStorage.getItem("theme-glyphs") === "true") {
+			document.documentElement.classList.add("glyphs");
+		} else {
+			document.documentElement.classList.add("no-glyphs");
+		}
+	} catch (e) {
+		console.error("localStorage is not available", e);
+	}
+};
+
+export function ThemeScripts() {
+	return (
+		<>
+			<script
+				dangerouslySetInnerHTML={{ __html: `(${modeScript.toString()})()` }}
+			/>
+			<script
+				dangerouslySetInnerHTML={{ __html: `(${glyphsScript.toString()})()` }}
+			/>
+		</>
+	);
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
 	const resolvedMode = resolveMode();
 	const [mode, setMode] = useState<ThemeMode>(resolvedMode);
@@ -122,6 +167,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 	return (
 		<ThemeContext.Provider value={{ mode, setMode, hasGlyphs, toggleGlyphs }}>
+			<ThemeScripts />
 			{children}
 		</ThemeContext.Provider>
 	);
@@ -133,49 +179,4 @@ export function useTheme() {
 		throw new Error("useTheme must be used within a ThemeProvider");
 	}
 	return context;
-}
-
-const modeScript = () => {
-	try {
-		const systemMode = window.matchMedia("(prefers-color-scheme: light)")
-			.matches
-			? "light"
-			: "dark";
-		const value = localStorage.getItem("theme-mode");
-		const selectedMode = value !== null ? value : "system";
-		const resolvedMode = selectedMode === "system" ? systemMode : selectedMode;
-
-		if (resolvedMode === "light") {
-			document.documentElement.classList.add("light");
-		} else {
-			document.documentElement.classList.add("dark");
-		}
-	} catch (e) {
-		console.error("localStorage is not available", e);
-	}
-};
-
-const glyphsScript = () => {
-	try {
-		if (localStorage.getItem("theme-glyphs") === "true") {
-			document.documentElement.classList.add("glyphs");
-		} else {
-			document.documentElement.classList.add("no-glyphs");
-		}
-	} catch (e) {
-		console.error("localStorage is not available", e);
-	}
-};
-
-export function ThemeScripts() {
-	return (
-		<>
-			<script
-				dangerouslySetInnerHTML={{ __html: `(${modeScript.toString()})()` }}
-			/>
-			<script
-				dangerouslySetInnerHTML={{ __html: `(${glyphsScript.toString()})()` }}
-			/>
-		</>
-	);
 }
