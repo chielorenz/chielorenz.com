@@ -11,9 +11,11 @@ const GliphsContext = createContext<GliphsContext | null>(null);
 export function GliphsProvider({ children }: { children: React.ReactNode }) {
 	let defaultState: boolean = true;
 	try {
-		const haskey = localStorage.getItem("gliphs") !== null;
-		defaultState = !haskey || localStorage.getItem("gliphs") === "true";
-	} catch (e) {}
+		const notSet = localStorage.getItem("gliphs") === null;
+		defaultState = notSet || localStorage.getItem("gliphs") === "true";
+	} catch (e) {
+		console.log("localStorage not available");
+	}
 
 	const [enabled, setEnabled] = useState(defaultState);
 
@@ -26,6 +28,16 @@ export function GliphsProvider({ children }: { children: React.ReactNode }) {
 			document.documentElement.classList.remove("gliphs");
 		}
 	}, [enabled]);
+
+	useEffect(() => {
+		const handleStorage = () => {
+			const notSet = localStorage.getItem("gliphs") === null;
+			const state = notSet || localStorage.getItem("gliphs") === "true";
+			setEnabled(state);
+		};
+		window.addEventListener("storage", handleStorage);
+		return () => window.removeEventListener("storage", handleStorage);
+	}, []);
 
 	const toggleGliphs = () => setEnabled(!enabled);
 
