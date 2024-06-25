@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import toogle from "@/images/gliphs-toggle.svg";
-import toggleInv from "@/images/gliphs-toggle-inverted.svg";
+import toggleInverted from "@/images/gliphs-toggle-inverted.svg";
+import toggleDisabled from "@/images/gliphs-toggle-disabled.svg";
 import { useGliphs } from "@/contexts/GliphsProvider";
 
 export default function GliphsToggle() {
@@ -17,8 +18,17 @@ export default function GliphsToggle() {
 
 	return (
 		<div className="cursor-pointer">
-			<Image {...commonProps} src={toogle} className="dark:hidden" />
-			<Image {...commonProps} src={toggleInv} className="hidden dark:block" />
+			<Image
+				{...commonProps}
+				src={toogle}
+				className="hidden gliphs:block gliphs:dark:hidden"
+			/>
+			<Image
+				{...commonProps}
+				src={toggleInverted}
+				className="hidden dark:gliphs:block"
+			/>
+			<Image {...commonProps} src={toggleDisabled} className="gliphs:hidden" />
 		</div>
 	);
 }
