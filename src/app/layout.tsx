@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: ReactNode }) {
 	return (
 		<html suppressHydrationWarning>
-			<body className="dark:bg-black dark:text-white">
+			<body className="dark:bg-neutral-900 dark:text-white">
 				<ThemeProvider>
 					<Glypshs />
 					{children}

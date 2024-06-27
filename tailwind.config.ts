@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import type { PluginUtils } from "tailwindcss/types/config";
 import plugin from "tailwindcss/plugin";
 
 const config: Config = {
@@ -12,21 +13,21 @@ const config: Config = {
 			sans: ["Outfit", "sans-serif"],
 		},
 		extend: {
-			typography: {
+			typography: ({ theme }: PluginUtils) => ({
 				DEFAULT: {
 					css: {
 						// Light mode code background color
-						"--tw-prose-pre-bg": "#f6f8fae6",
+						"--tw-prose-pre-bg": theme("colors.neutral.100/90%"),
 						// Dark mode code background color
-						"--tw-prose-invert-pre-bg": "#1a1a1ae6",
+						"--tw-prose-invert-pre-bg": theme("colors.neutral.800/90%"),
 					},
 				},
-			},
+			}),
 		},
 	},
 	plugins: [
 		require("@tailwindcss/typography"),
-		plugin(function ({ addVariant }) {
+		plugin(({ addVariant }) => {
 			addVariant("glyphs", [".glyphs &", ".glyphs&"]);
 			addVariant("no-glyphs", [".no-glyphs &", ".no-glyphs&"]);
 			addVariant("light", [".light &", ".light&"]);

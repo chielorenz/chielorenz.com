@@ -1,4 +1,5 @@
 import { createElement } from "react";
+import { out } from "outclass";
 import Link from "next/link";
 
 export default function Button({
@@ -10,13 +11,15 @@ export default function Button({
 	href?: string;
 	children?: React.ReactNode;
 }) {
-	const className =
-		"bg-black text-white py-0.5 px-2.5 rounded no-underline dark:bg-white dark:text-black";
 	return createElement(
 		href ? Link : "button",
 		{
 			href: href ?? "",
-			className,
+			className: out.parse(
+				"bg-neutral-900 dark:bg-white",
+				"text-white dark:text-neutral-900 no-underline",
+				"py-0.5 px-2.5 rounded"
+			),
 		},
 		children ?? label
 	);
