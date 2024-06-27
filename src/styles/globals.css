@@ -7,3 +7,9 @@
 
 @import "highlightjs-github.css";
 @import "glyphs.css";
+
+@layer components {
+	.link {
+		@apply underline underline-offset-4 decoration-dotted hover:decoration-solid;
+	}
+}
