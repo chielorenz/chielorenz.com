@@ -16,5 +16,13 @@
 
 	"html.autoClosingTags": false,
 	"javascript.autoClosingTags": false,
-	"typescript.autoClosingTags": false
+	"typescript.autoClosingTags": false,
+
+	"tailwindCSS.experimental.classRegex": [
+		// Enable IntelliSense on Outclass method calls outside "className" and "class" attributes
+		[
+			"\\.(?:parse|add|remove|set|with|variant)\\s*\\(\\s*([\\s\\S]*?)\\s*\\)\\s*",
+			"[\"'`]([^\"'`]*)[\"'`]"
+		]
+	]
 }
