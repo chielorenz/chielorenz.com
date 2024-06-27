@@ -11,6 +11,18 @@ const config: Config = {
 		fontFamily: {
 			sans: ["Outfit", "sans-serif"],
 		},
+		extend: {
+			typography: {
+				DEFAULT: {
+					css: {
+						// Light mode code background color
+						"--tw-prose-pre-bg": "#f6f8fae6",
+						// Dark mode code background color
+						"--tw-prose-invert-pre-bg": "#1a1a1ae6",
+					},
+				},
+			},
+		},
 	},
 	plugins: [
 		require("@tailwindcss/typography"),
@@ -18,7 +30,6 @@ const config: Config = {
 			addVariant("glyphs", [".glyphs &", ".glyphs&"]);
 			addVariant("no-glyphs", [".no-glyphs &", ".no-glyphs&"]);
 			addVariant("light", [".light &", ".light&"]);
-			addVariant("dark", [".dark &", ".dark&"]);
 		}),
 	],
 	darkMode: "selector",

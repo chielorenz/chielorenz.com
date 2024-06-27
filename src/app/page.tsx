@@ -12,13 +12,22 @@ export default async function Home() {
 							<Logo />
 							<h1 className="font-semibold text-3xl">Luca Lorenzini</h1>
 						</div>
-						<p className="mt-4">
+						<p className="mt-4 [&_a]:underline">
 							Developer working full-time at{" "}
-							<a href="https://wethod.com">wethod</a> and on many{" "}
-							<a href="https://github.com/chielorenz">side projects</a>.
+							<a href="https://wethod.com" className="underline">
+								wethod
+							</a>{" "}
+							and on many{" "}
+							<a href="https://github.com/chielorenz" className="underline">
+								side projects
+							</a>
+							.
 						</p>
 						<p>
-							DIY supporter and <a href="https://undiscover.it">music</a>{" "}
+							DIY supporter and{" "}
+							<a href="https://undiscover.it" className="underline">
+								music
+							</a>{" "}
 							enthusiast. My internet handler is <strong>@chielorenz</strong>.
 						</p>
 						<div className="mt-4 flex space-x-4">

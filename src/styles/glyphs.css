@@ -1,0 +1,20 @@
+.glyph {
+	position: fixed;
+	width: 16px;
+	height: 16px;
+	z-index: -1;
+	animation-name: wander;
+	animation-timing-function: ease;
+	animation-iteration-count: infinite;
+	animation-duration: var(--glyph-duration);
+}
+
+@keyframes wander {
+	0%,
+	100% {
+		transform: translate(0, 0) rotate(0);
+	}
+	50% {
+		transform: translate(var(--glyph-x), var(--glyph-y)) rotate(360deg);
+	}
+}

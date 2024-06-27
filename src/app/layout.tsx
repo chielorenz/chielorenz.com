@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { type Metadata } from "next";
-import { ThemeProvider, ThemeScripts } from "@/contexts/ThemeProvider";
-import Glypsh from "@/components/Glyphs";
-import "./globals.css";
+import { ThemeProvider } from "@/contexts/ThemeProvider";
+import { Glypshs } from "@/components/Glyphs";
+import "@/styles/globals.css";
 
 export const metadata: Metadata = {
 	title: "Home | Luca Lorenzini",
@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 		<html suppressHydrationWarning>
 			<body className="dark:bg-black dark:text-white">
 				<ThemeProvider>
-					<Glypsh />
+					<Glypshs />
 					{children}
 				</ThemeProvider>
 			</body>

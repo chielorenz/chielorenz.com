@@ -27,7 +27,7 @@ function getGlyphSource() {
 	return glyphsSources[Math.floor(Math.random() * glyphsSources.length)];
 }
 
-export default function Glipsh() {
+export function Glypshs() {
 	const glyphs = [];
 	for (let i = 0; i < getRandom(10, 20); i++) {
 		glyphs.push(
