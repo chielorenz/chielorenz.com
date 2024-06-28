@@ -1,6 +1,11 @@
 import Link from "next/link";
 import type { PostMeta } from "@/app/api/posts/route";
 import { format } from "@/lib/date";
+import { type Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Blog",
+};
 
 const Post = (postMeta: PostMeta) => {
 	return (

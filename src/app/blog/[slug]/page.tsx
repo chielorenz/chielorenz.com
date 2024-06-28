@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { PostMeta } from "@/app/api/posts/route";
 import { format } from "@/lib/date";
 
@@ -16,4 +17,17 @@ export async function generateStaticParams() {
 	const res = await fetch(process.env.API_URL + "/api/posts");
 	const postsMeta: PostMeta[] = await res.json();
 	return postsMeta.map((postMeta) => postMeta.slug);
+}
+
+export async function generateMetadata({
+	params,
+}: {
+	params: { slug: string };
+}): Promise<Metadata> {
+	const slug = params.slug;
+	const res = await fetch(process.env.API_URL + "/api/posts");
+	const postsMeta: PostMeta[] = await res.json();
+	const post = postsMeta.find((postMeta) => postMeta.slug === slug);
+
+	return { title: post?.title };
 }
