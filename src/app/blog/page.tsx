@@ -16,8 +16,7 @@ const Post = (postMeta: PostMeta) => {
 };
 
 export default async function Blog() {
-	// TODO use ENV
-	const res = await fetch("http://localhost:3000/api/posts");
+	const res = await fetch(process.env.API_URL + "/api/posts");
 	const postsMeta: PostMeta[] = await res.json();
 	const posts: React.ReactNode[] = [];
 
