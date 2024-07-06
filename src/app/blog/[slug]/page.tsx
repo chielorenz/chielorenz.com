@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
-import type { PostMeta } from "@/app/api/posts/route";
 import { format } from "@/lib/date";
+import { getPostMeta, getAllPostMeta } from "@/lib/post";
 
 export default async function Post({ params }: { params: { slug: string } }) {
-	const slug = params.slug;
-	const res = await fetch(process.env.API_URL + "/api/posts");
-	const postsMeta: PostMeta[] = await res.json();
-	const post = postsMeta.find((postMeta) => postMeta.slug === slug);
+	const postMeta = await getPostMeta(params.slug);
 
 	// Webpack need some information about static import path see https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import
-	const Post = await import(`@/posts/${post?.module}`);
+	const Post = await import(`@/posts/${postMeta.module}`);
 	return (
 		<>
 			<p>Last updated {format(Post.meta.timestamp)}</p>
@@ -19,9 +16,8 @@ export default async function Post({ params }: { params: { slug: string } }) {
 }
 
 export async function generateStaticParams() {
-	const res = await fetch(process.env.API_URL + "/api/posts");
-	const postsMeta: PostMeta[] = await res.json();
-	return postsMeta.map((postMeta) => postMeta.slug);
+	const postsMeta = await getAllPostMeta();
+	return postsMeta.map((postMeta) => ({ slug: postMeta.slug }));
 }
 
 export async function generateMetadata({
@@ -29,10 +25,6 @@ export async function generateMetadata({
 }: {
 	params: { slug: string };
 }): Promise<Metadata> {
-	const slug = params.slug;
-	const res = await fetch(process.env.API_URL + "/api/posts");
-	const postsMeta: PostMeta[] = await res.json();
-	const post = postsMeta.find((postMeta) => postMeta.slug === slug);
-
-	return { title: post?.title };
+	const postMeta = await getPostMeta(params.slug);
+	return { title: postMeta.title };
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import type { PostMeta } from "@/app/api/posts/route";
 import { format } from "@/lib/date";
 import { type Metadata } from "next";
+import { type PostMeta, getAllPostMeta } from "@/lib/post";
 
 export const metadata: Metadata = {
 	title: "Blog",
@@ -21,8 +21,7 @@ const Post = (postMeta: PostMeta) => {
 };
 
 export default async function Blog() {
-	const res = await fetch(process.env.API_URL + "/api/posts");
-	const postsMeta: PostMeta[] = await res.json();
+	const postsMeta = await getAllPostMeta();
 	const posts: React.ReactNode[] = [];
 
 	for (const postMeta of postsMeta) {

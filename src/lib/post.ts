@@ -8,9 +8,11 @@ export interface PostMeta extends Meta {
 	module: string;
 }
 
-export async function GET() {
+async function loadPostsMeta(slug?: string): Promise<PostMeta[]> {
 	const baseDir = path.join(process.cwd(), "src/posts/");
-	const files = await glob(path.join(baseDir, "/**/*.mdx"), {
+
+	const searchPath = slug || "*";
+	const files = await glob(path.join(baseDir, `/**/${searchPath}.mdx`), {
 		withFileTypes: true,
 	});
 
@@ -29,5 +31,17 @@ export async function GET() {
 
 	postsMeta.sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp));
 
-	return Response.json(postsMeta);
+	return postsMeta;
+}
+
+export async function getPostMeta(slug: string): Promise<PostMeta> {
+	const postsMeta = await loadPostsMeta(slug);
+	if (postsMeta.length === 0) {
+		throw new Error(`Post not found: ${slug}`);
+	}
+	return postsMeta[0];
+}
+
+export async function getAllPostMeta(): Promise<PostMeta[]> {
+	return loadPostsMeta();
 }
