@@ -3,26 +3,27 @@ import { glob } from "glob";
 import { Meta } from ".mdx";
 
 export interface PostMeta extends Meta {
-	filename: string;
 	href: string;
 	slug: string;
+	module: string;
 }
 
 export async function GET() {
-	const files = await glob(process.cwd() + "/src/posts/**/*.mdx", {
+	const baseDir = path.join(process.cwd(), "src/posts/");
+	const files = await glob(path.join(baseDir, "/**/*.mdx"), {
 		withFileTypes: true,
 	});
 
 	const postsMeta: PostMeta[] = [];
 	for (const file of files) {
-		const fileName = file.name;
-		const slug = path.parse(fileName).name;
+		const slug = path.parse(file.name).name;
 		const href = path.join("blog", slug);
+		const module = file.fullpath().replace(baseDir, "");
 		// Webpack need come information about static import path see https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import
-		const post = await import(`@/posts/${file.name}`);
+		const post = await import(`@/posts/${module}`);
 
 		if (post.meta.published) {
-			postsMeta.push({ ...post.meta, fileName, slug, href });
+			postsMeta.push({ ...post.meta, href, slug, module });
 		}
 	}
 
