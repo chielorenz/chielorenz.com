@@ -18,8 +18,15 @@ const config: Config = {
 					css: {
 						// Light mode code background color
 						"--tw-prose-pre-bg": theme("colors.neutral.100/90%"),
+						// Light mode code text color
+						"--tw-prose-pre-code": "var(--tw-prose-body)",
 						// Dark mode code background color
 						"--tw-prose-invert-pre-bg": theme("colors.neutral.800/90%"),
+						// Dark mode code text color
+						"--tw-prose-invert-pre-code": "var(--tw-prose-invert-body)",
+						a: {
+							"@apply link": {},
+						},
 					},
 				},
 			}),
