@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import square from "@/images/glyphs/square.svg";
 import squareOut from "@/images/glyphs/square-outline.svg";
@@ -28,32 +30,38 @@ function getGlyphSource() {
 }
 
 export function Glypshs() {
-	const glyphs = [];
-	for (let i = 0; i < getRandom(10, 20); i++) {
-		glyphs.push(
-			<Image
-				key={i}
-				height={16}
-				width={16}
-				style={
-					{
-						// X position and movement
-						left: `${getRandom(0, 100)}vw`,
-						"--glyph-x": `${getRandom(-50, 50)}vw`,
+	const [glyphs, setGlyphs] = useState<React.ReactNode[]>([]);
 
-						// Y position and movement
-						top: `${getRandom(0, 100)}vh`,
-						"--glyph-y": `${getRandom(-50, 50)}vh`,
+	useEffect(() => {
+		const glyphs: React.ReactNode[] = [];
+		for (let i = 0; i < getRandom(10, 20); i++) {
+			glyphs.push(
+				<Image
+					key={i}
+					height={16}
+					width={16}
+					style={
+						{
+							// X position and movement
+							left: `${getRandom(0, 100)}vw`,
+							"--glyph-x": `${getRandom(-50, 50)}vw`,
 
-						// Animation duration
-						"--glyph-duration": `${getRandom(60, 90)}s`,
-					} as React.CSSProperties
-				}
-				src={getGlyphSource()}
-				className="glyph invisible glyphs:visible"
-				alt="Glyph"
-			/>
-		);
-	}
+							// Y position and movement
+							top: `${getRandom(0, 100)}vh`,
+							"--glyph-y": `${getRandom(-50, 50)}vh`,
+
+							// Animation duration
+							"--glyph-duration": `${getRandom(60, 90)}s`,
+						} as React.CSSProperties
+					}
+					src={getGlyphSource()}
+					className="glyph invisible glyphs:visible"
+					alt="Glyph"
+				/>
+			);
+		}
+		setGlyphs(glyphs);
+	}, []);
+
 	return <div>{glyphs}</div>;
 }
