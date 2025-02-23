@@ -12,6 +12,7 @@ export default function GlyphsToggle() {
 		onClick: toggleGlyphs,
 		alt: "Toggle glyphs",
 		width: 16,
+		priority: true,
 	};
 
 	return (

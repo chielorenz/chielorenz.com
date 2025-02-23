@@ -10,6 +10,7 @@ export default function LightSwitch() {
 	const commonProps = {
 		alt: "Toggle light/dark mode",
 		width: 16,
+		priority: true,
 	};
 
 	return (

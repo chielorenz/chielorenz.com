@@ -5,6 +5,7 @@ import logoInv from "@/images/logo-inverted.svg";
 export default function Logo() {
 	const commonProps = {
 		alt: "Logo",
+		priority: true,
 		style: { width: 40, height: 20 },
 	};
 	return (
