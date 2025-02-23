@@ -1,0 +1,119 @@
+---
+title: Rolling Upgrade™
+excerpt: How we upgraded a 300k-line PHP codebase while continuing to develop new features and fix bugs.
+timestamp: 2024-05-14
+published: true
+---
+
+import Image from "next/image";
+import versionsSrc from "./symfony-versions.png";
+
+# Rolling Upgrade™
+
+Imagine you're part of a small team of four developers. You're expected to follow the product roadmap, fix bugs, provide customer support, and, on top of that, upgrade a 300,000-line codebase—all without disrupting ongoing development. How do you manage?
+
+We couldn't afford to dedicate more than one developer to the upgrade, and a single developer would have taken weeks to complete it. Meanwhile, the rest of the team would continue making changes, leading to a nightmare of merge conflicts.
+
+So, we decided to bypass this issue entirely by automating the process. I allocated about 30% of my time to developing a procedure that would allow us to upgrade the codebase with a single click.
+
+## The Codebase
+
+What exactly were we upgrading? The backend of a web app with 300,000 lines of PHP 5.6 code, running on Symfony 2.7, needed to be updated to PHP 8.1 and Symfony 6.4 (the latest version at the time). This application handled database connections and migrations, generated Excel files, created PDFs, sent emails, managed image uploads, processed customer payments, uploaded files to S3, connected to SOAP servers, and more. As you can imagine, the number of dependencies involved was far from trivial.
+
+## The Upgrade Process
+
+Upgrading PHP itself wasn’t too difficult. Moving from 5.6 to 8.1 meant skipping PHP 6, which doesn’t exist, and simply ensuring the codebase didn’t use deprecated syntax.
+
+The real challenge was updating third-party dependencies. Each vendor package had to be upgraded to a version compatible with PHP 8.1. Some vendors had been deprecated and no longer supported, requiring us to find and integrate alternatives.
+
+Upgrading Symfony was even more complex. Despite Symfony's excellent documentation, we had to deal with:
+
+- Changes in folder structures and namespaces
+- Configuration updates
+- Introduction of secrets management
+- Dependency injection via type-hinting
+- Database migration system changes
+
+To upgrade from Symfony 2.7 to 6.4, we had to navigate four major and 16 minor versions:
+
+<Image src={versionsSrc} alt="Symfony versions" />
+
+We carefully studied the upgrade guides for each intermediate version, ensuring our process made all necessary changes. This involved updating configurations, restructuring directories, and adopting best practices to future-proof our codebase.
+
+## The Automation Procedure
+
+The upgrade process was handled by a Bash script that:
+
+1. Cloned the codebase into a new folder and reorganized files based on the new structure.
+2. Updated files using a combination of regex, `rsync`, `find`, `sed`, and custom PHP scripts.
+3. Used Docker containers to run Composer and Symfony commands.
+4. Committed changes at each step to create checkpoints for debugging.
+
+### Example: Bash Script Excerpts
+
+```bash
+log "Copy test classes"
+rsync -a "$S2_DIR/src/ApiBundle/Tests/Controller/" $S6_DIR/tests/Controller/
+commit "ADD: Copy test classes" $S6_DIR
+
+log "Update entity manager injection for type-hinting"
+find $S6_DIR/src/ -type f -exec sed -i -E 's/\$this->em/\$this->coreEm/g' {} +
+commit "UPDATE: Entity manager injection for type-hinting" $S6_DIR
+```
+
+### Example: PHP Script for Dependency Injection
+
+```php
+// Extract class definition
+preg_match('/class.*[\n\r]*{/', $content, $matches, PREG_OFFSET_CAPTURE);
+list($capture, $offset) = $matches[0];
+
+// Determine insert position
+$insertPosition = $offset + strlen($capture);
+$beforeText = substr($content, 0, $insertPosition);
+$afterText = substr($content, $insertPosition);
+
+// Insert new dependency injection method
+$newText = <<<EOF
+    public static function getSubscribedServices(): array
+    {
+        return array_merge(parent::getSubscribedServices(), [
+            // List of services
+        ]);
+    }
+EOF;
+
+// Write the updated content
+file_put_contents($fullPath, $beforeText . $newText . $afterText);
+```
+
+By the end, the automation consisted of a 1,200-line Bash script, hundreds of lines of PHP, YAML configuration files, and over 500 commits.
+
+## The Big Day: Running the Upgrade
+
+This process took 20 months—not weeks, not days. After extensive testing and a leap of faith, we finally executed:
+
+```bash
+sh ./run.sh
+# Several minutes of waiting...
+Done! Checkout the upgraded codebase in $S6_DIR.
+```
+
+We then replaced the old codebase with the newly generated one, keeping the `.git` folder intact, and committed the changes—a commit that altered every single file.
+
+## Results & Reflections
+
+It wasn’t easy. At times, we wondered if we’d ever finish. But we knew it was necessary, so we kept going.
+
+Choosing to automate the upgrade instead of manually updating the codebase was a winning strategy—perhaps the only viable one. The extra effort required to develop the automation paid off by making the upgrade reproducible and testable.
+
+After the upgrade, development accelerated. PHP 8.1 significantly improved performance, removing outdated dependencies streamlined the codebase, and Symfony 6.4 introduced new tools that weren’t previously available.
+
+## Lessons Learned
+
+1. **We can handle more complexity than we thought.**
+2. **Letting a codebase become outdated is costly.** The effort to update it is far greater than maintaining it continuously.
+3. **Automating large-scale updates is invaluable.** It provides a replicable process and reduces risk.
+4. **Persistence pays off.** A seemingly endless task can be completed with the right mindset and approach.
+
+This upgrade was a monumental challenge, but ultimately, it transformed our workflow and improved our codebase for the long run.
