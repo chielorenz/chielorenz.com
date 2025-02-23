@@ -8,50 +8,37 @@ published: true
 import Image from "next/image";
 import versionsSrc from "./symfony-versions.png";
 
-# Rolling upgrade™
+# Rolling Upgrade™
 
-You find yourself in a small team, with four developers, having to meet the product roadmap deadlines, fix bugs, provide customer support, and update a 300k-line codebase without stopping everything. How do you do it?
+You're part of a small team with four developers, juggling product roadmap deadlines, bug fixes, customer support, and the need to upgrade a 300k-line PHP codebase—all without pausing development. How do you do it?
 
-To meet deadlines, we couldn’t assign more than one developer to work on the upgrade, and with just one person, the upgrade would take several weeks. Weeks during which the rest of the team would continue updating the codebase with new features and bug fixes, creating a hell of merge conflicts.
+With tight deadlines, we could only allocate one developer to the upgrade, but that meant it would take weeks. Meanwhile, the rest of the team would keep updating the codebase with new features and bug fixes, leading to a nightmare of merge conflicts.
 
-So, the idea was to bypass this problem entirely by automating the upgrade. I dedicated part of my time, around 30%, to writing a procedure capable of upgrading the codebase with a single click.
+Our solution? Automate the upgrade process. I dedicated about 30% of my time to writing a script capable of upgrading the codebase with a single click, what we jokingly called in hindsight Rolling Upgrade™.
 
-## The Codebase
+## The approach
 
-But what kind of codebase was it? The backend of a web app, with 300k lines of code, written in PHP 5.6 with Symfony 2.7, that needed to be upgraded to PHP 8.1 with Symfony 6.4 (the latest versions at the time of the upgrade). The app handled database connections and migrations, generated Excel files, created PDFs, sent emails, managed image uploads, processed customer charges, uploaded files to S3, connected to SOAP servers, and much more. As you can imagine, the number of vendors used was anything but trivial.
+The project was a backend for a web app with 300k lines of PHP 5.6 code using Symfony 2.7. The goal was to upgrade to PHP 8.1 and Symfony 6.4—the latest versions at the time. The app handled database migrations, generated Excel files, created PDFs, sent emails, uploaded images, processed customer billing, interacted with SOAP servers, and more. The number of vendor dependencies was significant.
 
-## The Upgrade
+Upgrading PHP itself wasn’t too difficult. The main challenge was ensuring compatibility with 8.1 by updating deprecated syntax. The real problem lay in updating vendor dependencies, as all of them had to be upgraded to versions compatible with PHP 8.1.
 
-Upgrading PHP was not particularly challenging: going from 5.6 to 8.1 meant skipping two major versions (PHP 6 doesn’t exist). The procedure only needed to ensure that the codebase didn’t use deprecated syntax. The real challenge was upgrading the vendors, which all needed to be updated to versions compatible with PHP 8.1.
+We systematically reviewed each vendor, determined the correct version, found upgrade guides, and modified our upgrade script accordingly. Some vendors were deprecated and unsupported for PHP 8.1, requiring replacements and adjustments in our automation process.
 
-The work involved reviewing all vendors, determining the correct versions to use, finding upgrade guides, and ensuring the procedure applied the required modifications. In some cases, the vendors were deprecated and hadn’t been updated for PHP 8.1 support. In those cases, we had to choose an alternative and ensure the procedure replaced the old library.
+Symfony's upgrade was more complex. Despite excellent documentation, the changes included new folder structures, namespace updates, configuration adjustments, the introduction of secrets, type-hinted dependency injection, a new database migration system, and more.
 
-Upgrading Symfony was more complex. Despite the excellent documentation available for version upgrades, we faced numerous challenges, such as changes in folder structures and namespaces, configuration updates, the introduction of secrets, dependency injection via type-hinting, database migration system changes, and surely other issues my brain has conveniently forgotten as a defense mechanism.
+To move from Symfony 2.7 to 6.4, we had to navigate four major and sixteen minor version upgrades:
 
-Going from Symfony 2.7 to 6.4 meant four major versions and 16 minor ones:
+<Image src={versionsSrc} alt="Symfony versions" />
 
-<Image src={versionsSrc} alt="symfony versions" />
+We studied each intermediate upgrade guide, identified the impact on our codebase, and automated the required modifications. This included new configurations, folder restructuring, and best practices we chose to adopt for long-term maintainability.
 
-We went through the upgrade guides for all intermediate versions to understand their impact on our codebase and ensured that the procedure made the necessary modifications. These mainly involved new configurations, different folder structures, and new best practices that, while not strictly required, we decided to adopt anyway.
+## The script
 
-## The Procedure
+The script was a bash file that cloned the codebase, applied structural changes, and updated files using regex, rsync, find, sed, and custom PHP scripts. Docker containers were used to execute Composer and Symfony console commands. At each step, the script committed changes to create debugging checkpoints.
 
-The procedure consisted of a Bash script that cloned the codebase into a folder, copied the files into another folder using the new structure, and updated them using a mix of techniques such as regex, rsync, find, sed, and custom PHP scripts. Several Docker containers, created by the procedure itself, were used to execute composer commands and Symfony console commands. At each step, the procedure committed the changes to create checkpoints for debugging.
-
-Here are some examples. This is a snippet of the Bash script:
+An extract from the bash script where it updates entity manager injection:
 
 ```bash
-log "Copy tests classes"
-rsync -a "$S2_DIR/src/ApiBundle/Tests/Controller/" $S6_DIR/tests/Controller/
-rsync -a "$S2_DIR/src/CoreBundle/Tests/Controller/" $S6_DIR/tests/Controller/
-rsync -a "$S2_DIR/src/CoreBundle/Tests/Entity/" $S6_DIR/tests/Entity/
-commit "ADD: Copy tests classes" $S6_DIR
-
-log "Update entities"
-find $S6_DIR/src/ $S6_DIR/tests/ $S6_DIR/config/ -type f -exec gsed -i -E -e 's/((Canvas|Api|Core|CRM|Cron|Desk|Export|Import|IncomeStatement|Migration)Bundle)\\+Entity/App\\Entity\\Core/g' {} +
-find $S6_DIR/src/ $S6_DIR/tests/ $S6_DIR/config/ -type f -exec gsed -i -E -e 's/(Dashboard|Group|Integration)Bundle\\+Entity\\+Core/App\\Entity\\Core/g' {} +
-commit "UPDATE: namespaces" $S6_DIR
-
 log "Update entity manager injection to allow type-hintyng in services"
 find $S6_DIR/src/ $S6_DIR/tests/ -type f -exec gsed -i -E -e 's/\$\bem\b/\$coreEm/g' {} +
 find $S6_DIR/src/ $S6_DIR/tests/ -type f -exec gsed -i -E -e 's/->em\b/->coreEm/g' {} +
@@ -60,10 +47,14 @@ find $S6_DIR/src/ $S6_DIR/tests/ -type f -exec gsed -i -E -e 's/->get\("doctrine
 find $S6_DIR/src/ $S6_DIR/tests/ -type f -exec gsed -i -E -e 's/->get\("doctrine"\)->getManager\('"'"'default'"'"'\)/->get\('"'"'doctrine.orm.core_entity_manager'"'"'\)/g' {} +
 find $S6_DIR/src/ $S6_DIR/tests/ -type f -exec gsed -i -E -e 's/->get\('"'"'doctrine'"'"'\)->getManager\('"'"'default'"'"'\)/->get\('"'"'doctrine.orm.core_entity_manager'"'"'\)/g' {} +
 commit "UPDATE: entity manager injection to allow type-hinting in services" $S6_DIR
+```
 
+Here we replace PHPExcel with PhpSpreadsheet using RectorPHP:
+
+```bash
 log "Replace PHPExcel -> PhpSpreadsheet with rector"
 docker exec upgrade-php-8 composer require --no-interaction --with-all-dependencies --working-dir=/var/www/api.s6 --dev rector/rector rector/rector-phpoffice
-docker exec upgrade-php-8 /bin/ash -c "cd /var/www/api.s6/ && php bin/console cache:pool:clear cache.global_clearer" # clear cache
+docker exec upgrade-php-8 /bin/ash -c "cd /var/www/api.s6/ && php bin/console cache:pool:clear cache.global_clearer"
 docker cp $CONFIG/rector.php upgrade-php-8:/var/www/api.s6/
 docker cp $CONFIG/phpoffice upgrade-php-8:/var/www/api.s6/vendor
 docker exec upgrade-php-8 /bin/ash -c "cd /var/www/api.s6/ && vendor/bin/rector process src"
@@ -71,10 +62,9 @@ docker exec upgrade-php-8 composer remove --no-interaction --with-all-dependenci
 commit "UPDATE: replace PHPExcel -> PhpSpreadsheet with rector" $S6_DIR
 ```
 
-This is a snippet of a PHP script that updates controllers to work with the new dependency injection via type-hinting:
+Here an extract from the PHP script that adds `getSubscribedServices()` to each controllers to make them work with the new dependency injection system:
 
 ```php
-...
 // Find the class definition in the controller with a regex
 // (use PREG_OFFSET_CAPTURE to get the match offset (in bytes))
 $matchClass = '/class.*[\n\r]*{/';
@@ -100,39 +90,22 @@ $newText = <<<EOF
         return array_merge(parent::getSubscribedServices(), [{$subscribers}]);
     }
 EOF;
-
-// Join the final content and write it to the file
-$newContent = $beforeText.$newText.$afterText;
-$file = fopen($fullPath, "w");
-fwrite($file, $newContent);
-fclose($file);
-...
 ```
 
-By the end, the procedure consisted of a main Bash script with over 1,200 lines, hundreds of lines of PHP scripts, and YAML configuration files, totaling over 500 commits.
+At the end, the script consisted of a 1,200+ line of bash, 500+ lines of PHP and YAML configuration files, and over 500 commits.
 
-## The Upgrade Day
+## The outcome
 
-This was a job that took around 20 months, not weeks. Months. At a certain point, with enough testing and hope, we decided it was time to take the leap, so:
+After 20 months of work—yes, months, not weeks—we finally pulled the trigger:
 
 ```bash
 sh ./run.sh
-# Several minutes of waiting, I don’t remember exactly how many
-Done, checkout the codebase with Symfony 6.4 and PHP 8.1 in the $S6_DIR folder
+# Several minutes later…
+Done, checkout the codebase with Symfony 6.4 and PHP 8.1 in $S6_DIR
 ```
 
-We then took the entire folder generated by the procedure, replaced the old codebase while keeping the .git folder, and committed the changes—a commit that modified every single file in the codebase.
+We swapped the old codebase with the new one, preserved the .git folder, and committed the changes. A single commit modified every file in the repository.
 
-## Recap
+This wasn’t an easy task. At times, we doubted whether we'd ever finish, but we knew it was necessary, so we pushed through. Choosing to automate the upgrade instead of freezing feature development was the right call. It required a significant upfront effort, but it made the process testable and repeatable. Post-upgrade, we immediately saw benefits: PHP 8.1’s performance boost, a cleaner codebase free of deprecated dependencies, and access to new Symfony features.
 
-It was not an easy task. At times, we wondered if we would ever finish, but we knew it had to be done, so we pushed through.
-
-The decision to continue product development while writing a procedure to handle the upgrade proved to be a winning choice—perhaps even the only viable one in hindsight. The overhead of figuring out how to upgrade the codebase without doing it directly but by writing a procedure instead added significant complexity. However, it made the upgrade testable and repeatable.
-
-After the upgrade, development accelerated. PHP 8.1 brought significant performance improvements, removing deprecated vendors made the codebase leaner, and adopting the latest Symfony version gave us access to several new tools.
-
-## Lessons Learned
-
-We realized that as a team, we could handle more complexity than we thought. We also learned that we had put ourselves in this situation by not keeping the codebase updated and that the effort to fix it was significantly greater than the effort needed to maintain it continuously.
-
-Doing this upgrade I also learned many things, from unknown bash commands to how to read vendor upgrade guides, from how to manage a long task along with all the other necessary tasks to how not to give up on a task that seems to have no end but then, after 20 months, it ends.
+We realized our team was capable of handling more complexity than we had thought. More importantly, we understood that neglecting updates led to a far greater effort down the line. Through this upgrade, I learned advanced bash scripting, how to analyze vendor upgrade paths, how to balance long-term projects with daily development, and most importantly, how to persist through seemingly endless tasks—because eventually, even a 20-month upgrade gets done.
