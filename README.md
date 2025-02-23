@@ -5,6 +5,7 @@ This repository contains the source code of my personal website [https://chielor
 ## Up and running
 
 ```
-npm install
-npm run dev
+docker compose up
 ```
+
+Visit [http://localhost:3001](http://localhost:3001).

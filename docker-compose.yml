@@ -1,0 +1,12 @@
+name: chielorenz
+services:
+  app:
+    image: node:18-alpine
+    build: .
+    container_name: chielorenz
+    volumes:
+      - .:/app
+    ports:
+      - 3001:3000
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
