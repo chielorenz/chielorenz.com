@@ -1,5 +1,5 @@
 ---
-title: Rolling updrage™
+title: Rolling Upgrade™
 excerpt: Or how we upgraded a 300k line PHP codebase while continuing the development of new features and bug fixing.
 timestamp: 2024-05-14
 published: true
@@ -8,37 +8,37 @@ published: true
 import Image from "next/image";
 import versionsSrc from "./symfony-versions.png";
 
-# Rolling upgrade™
+# Rolling Upgrade™
 
-Ti ritrovi in un piccolo team, con quattro sviluppatori, a dover rispettare la roadmap del prodotto, sistemare bug, fare assistenza ai clienti e la necessita di aggiornare una codebase di 300k righe di codice senza fermare il tutto. Come fai?
+Ti ritrovi in un piccolo team, con quattro sviluppatori, a dover rispettare la roadmap del prodotto, sistemare bug, fare assistenza ai clienti e con la necessità di aggiornare una codebase di 300k righe di codice senza fermare il tutto. Come fai?
 
-Per rispettare le scadenze non potevamo mettere piu di uno sviluppatore a lavorare all'aggiornamento, e con una sola persona l'aggioramento avrebbe impiegato diverse settimane. Settimane nelle quali il resto del team avrebbe continuato ad aggiornare la codebase con nuove funzionalita e fix di bug, insomma un inferno di merge conflicts.
+Per rispettare le scadenze non potevamo mettere più di uno sviluppatore a lavorare all'aggiornamento, e con una sola persona l'aggiornamento avrebbe impiegato diverse settimane. Settimane nelle quali il resto del team avrebbe continuato ad aggiornare la codebase con nuove funzionalità e fix di bug, insomma un inferno di merge conflicts.
 
-L'idea e quindi stata quella di bypassare completamente questo problema automatizzando l'aggiornamento, ho quindi dedicato parte del mio tempo, diciamo un 30%, alla scrittura di una procedura che doveva essere in grado di aggiornare la codebase con un click.
+L'idea è quindi stata quella di bypassare completamente questo problema automatizzando l'aggiornamento. Ho quindi dedicato parte del mio tempo, diciamo un 30%, alla scrittura di una procedura che doveva essere in grado di aggiornare la codebase con un click.
 
 ## La codebase
 
-Ma di che codebase si trattava? La codebase del backend di una web app, con 300k linee di codice, in PHP 5.6 con Symony 2.7, che doveva essere aggiornata a PHP 8.1 con Symfony 6.4 (le piu reventi all'epoca dell'aggiornamento). L'app gestiva il collegamento ad un database e le sue migrazione, generava file Excel, creava PDF, inviava email, gestiva l'upload di immagini, gestiva gli addebiti ai clienti, caricava file su S3, si collegava a server SOAP e altro ancora, la quantita di vendor usati non era affatto banale come potete immaginare.
+Ma di che codebase si trattava? La codebase del backend di una web app, con 300k linee di codice, in PHP 5.6 con Symfony 2.7, che doveva essere aggiornata a PHP 8.1 con Symfony 6.4 (le più recenti all'epoca dell'aggiornamento). L'app gestiva il collegamento a un database e le sue migrazioni, generava file Excel, creava PDF, inviava email, gestiva l'upload di immagini, gestiva gli addebiti ai clienti, caricava file su S3, si collegava a server SOAP e altro ancora. La quantità di vendor usati non era affatto banale, come potete immaginare.
 
 ## L'aggiornamento
 
-L'aggiornamento di PHP non e stato particolamente sfidante, da 5.6 a 8.1 sono due major, PHP 6 non esiste. La procedura doveva solo controllare che la codebase non utilizzasse sintassi deprecata. Il vero problema e stato l'aggiormanto dei vendor che dovevano tutti essere aggiornati ad una versione compatibile con 8.1
+L'aggiornamento di PHP non è stato particolarmente sfidante: da 5.6 a 8.1 sono due major, PHP 6 non esiste. La procedura doveva solo controllare che la codebase non utilizzasse sintassi deprecata. Il vero problema è stato l'aggiornamento dei vendor, che dovevano tutti essere aggiornati a una versione compatibile con 8.1.
 
-Il lavoro e stato quindi quello di passare tutti i vendor, capire la versione corretta da usare, cercare una guida per fare l'upgrade e far si che la procedura apportasse le modifiche richieste. In alcuni casi e vendor usati erano deprecati e non aggiornati per supportare PHP 8.1, in questi casi abbiamo dovuto scegliere un'alternativa e far si che la procedura sostituisse la vecchia libreria.
+Il lavoro è stato quindi quello di passare in rassegna tutti i vendor, capire la versione corretta da usare, cercare una guida per fare l'upgrade e fare in modo che la procedura apportasse le modifiche richieste. In alcuni casi i vendor usati erano deprecati e non aggiornati per supportare PHP 8.1. In questi casi abbiamo dovuto scegliere un'alternativa e fare in modo che la procedura sostituisse la vecchia libreria.
 
-L'aggiormento del framerwork Symfony era piu complessa, nonostante l'ottima documentazione fornita per l'upgrade di versione, le problematiche da affrontare erano tante, come il cambio della struttura delle cartelle e dei namespace, l'aggiornamento delle configurazioni, l'introduzione dei secrets, della dependency injection tramite type-hint, il cambio del sistema di migrazioni del database e sicuramente altre che il mio cervello ha dimenticato come meccanismo di difesa.
+L'aggiornamento del framework Symfony era più complesso. Nonostante l'ottima documentazione fornita per l'upgrade di versione, le problematiche da affrontare erano tante, come il cambio della struttura delle cartelle e dei namespace, l'aggiornamento delle configurazioni, l'introduzione dei secrets, della dependency injection tramite type-hint, il cambio del sistema di migrazioni del database e sicuramente altre che il mio cervello ha dimenticato come meccanismo di difesa.
 
 Per passare da Symfony 2.7 a 6.4 sono quattro major e 16 minor:
 
 <Image src={versionsSrc} alt="symfony versions" />
 
-Abbiamo quindi consultato le guide per l'updrade di tutte le versioni intermedie per capite come impattavano sulla nostra codebase e abbiamo fatto si che la procedura apportasse le modifiche necessarie. Principalmente si trattava di nuove configurazioni, strutture delle cartelle diverse e nuove best practices che, sebbene non fosse necessario, abbiamo deciso comunque di adottare.
+Abbiamo quindi consultato le guide per l'upgrade di tutte le versioni intermedie per capire come impattavano sulla nostra codebase e abbiamo fatto in modo che la procedura apportasse le modifiche necessarie. Principalmente si trattava di nuove configurazioni, strutture delle cartelle diverse e nuove best practices che, sebbene non fosse necessario adottare, abbiamo deciso comunque di implementare.
 
 ## La procedura
 
-La procedura consiseteva in uno script bash che clonava la codebase in una cartella e copiava i file in un'altra cartella usando la nuova struttura, li aggiornava usando un mix di tecniche come regex, rsync, find, sed e script PHP custom. Sono stati usati diversi container docker, creati dalla procedura stessa, per poter eseguire comandi composer e della console di Symfony. Ad ogni step la procedura committava le modifiche per avere dei checkpoint per il debug.
+La procedura consisteva in uno script bash che clonava la codebase in una cartella e copiava i file in un'altra cartella usando la nuova struttura. Li aggiornava usando un mix di tecniche come regex, rsync, find, sed e script PHP custom. Sono stati usati diversi container Docker, creati dalla procedura stessa, per poter eseguire comandi composer e della console di Symfony. Ad ogni step la procedura committava le modifiche per avere dei checkpoint per il debug.
 
-Vediamo alcuni esempi, questo e un pezzo dello script bash:
+Vediamo alcuni esempi, questo è un pezzo dello script bash:
 
 ```bash
 log "Copy tests classes"
@@ -71,7 +71,7 @@ docker exec upgrade-php-8 composer remove --no-interaction --with-all-dependenci
 commit "UPDATE: replace PHPExcel -> PhpSpreadsheet with rector" $S6_DIR
 ```
 
-Questo invece e un pezzo di uno script PHP che aggiorna i controller per far si che continuino a funzionare anche con la nuova dependency injection tramite type-hint:
+Questo invece è un pezzo di uno script PHP che aggiorna i controller per far sì che continuino a funzionare anche con la nuova dependency injection tramite type-hint:
 
 ```php
 ...
@@ -109,11 +109,11 @@ fclose($file);
 ...
 ```
 
-Alla fine dei lavori la procedura consisteva di uno script bash principale di oltre 1200 righe, e centinaia di righe di script PHP e file di configurazione yaml, il tutto in oltre 500 commit.
+Alla fine dei lavori, la procedura consisteva in uno script bash principale di oltre 1200 righe e centinaia di righe di script PHP e file di configurazione YAML, il tutto in oltre 500 commit.
 
 ## Il giorno dell'upgrade
 
-E stato un lavoro di circa 20 mesi, non settimane, mesi. Ad un certo punto, con sufficienti test e speranze, abbiamo deciso che fosse il momento di fare il salto, quindi:
+È stato un lavoro di circa 20 mesi, non settimane. Mesi. Ad un certo punto, con sufficienti test e speranze, abbiamo deciso che fosse il momento di fare il salto, quindi:
 
 ```bash
 sh ./run.sh
@@ -121,19 +121,18 @@ sh ./run.sh
 Done, checkout the codebase with symfony 6.4 and PHP 8.1 on $S6_DIR folder
 ```
 
-Abbiamo poi preso l'intera cartella generata dalla procedura e l'abbiamo sostituita alla vecchia codebase, mantenendo la cartella .git, e committato le modifiche, commit che ha modificato ogni singolo fine della codebase.
-
+Abbiamo poi preso l'intera cartella generata dalla procedura e l'abbiamo sostituita alla vecchia codebase, mantenendo la cartella .git, e committato le modifiche. Un commit che ha modificato ogni singolo file della codebase.
 
 ## Resoconto
 
-Non e stato sicuramente non task facile, a momenti ci siamo chiesti se avremmo mai finito, ma sapevamo anche fosse necessario farlo, quindi abbiamo continuato.
+Non è stato sicuramente un task facile, a momenti ci siamo chiesti se avremmo mai finito, ma sapevamo anche che fosse necessario farlo, quindi abbiamo continuato.
 
-La decisione di non fermare i lavori sul prodotto per fare l'aggiornamento ma scrivere una procedura che sapesse fare l'aggiornamento si e rivelata una soluzione vincente, a posteriori forse anche l'unica soluzione possibile. L'overhead di dover capire come aggiornare la codebase ma non poterlo fare direttamente ma bensi di dover scrivere una procedura per farlo ha sicuramente avuto un grosso impatto sulla quantita di lavoro necessario, d'altra parte ha reso l'aggiormaneto testabile e replicabile.
+La decisione di non fermare i lavori sul prodotto per fare l'aggiornamento, ma scrivere una procedura che sapesse fare l'aggiornamento, si è rivelata una soluzione vincente, a posteriori forse anche l'unica possibile. L'overhead di dover capire come aggiornare la codebase senza poterlo fare direttamente, ma dovendo scrivere una procedura per farlo, ha sicuramente avuto un grosso impatto sulla quantità di lavoro necessario. D'altra parte, ha reso l'aggiornamento testabile e replicabile.
 
-Dopo l'aggioramento abbiamo cambiato marcia con lo sviluppo, PHP 8.1 aveva un notevole aumento delle prestazioni, esserci liberati di vendor deprecati ha reso la codebase piu snella e l'adozione dell'ultima versione di Symfony ci ha messo a disposizioni diversi nuovi strumenti che prima non erano accessibili.
+Dopo l'aggiornamento abbiamo cambiato marcia con lo sviluppo. PHP 8.1 aveva un notevole aumento delle prestazioni, esserci liberati di vendor deprecati ha reso la codebase più snella e l'adozione dell'ultima versione di Symfony ci ha messo a disposizione diversi nuovi strumenti che prima non erano accessibili.
 
 ## Lezioni imparate
 
-Abbiamo capito che come team eravamo in grado di gestire complessita maggiori di quel che pensavamo. Abbiamo capito che a metterci nella situazione nella quale eravamo, con una codebase non aggiornata, era stata colpa nostra e che l'effort per rimediare e assolutamente maggiore di quello per che serve per mantenerla aggiorntata costantemente.
+Abbiamo capito che come team eravamo in grado di gestire complessità maggiori di quel che pensavamo. Abbiamo capito che a metterci nella situazione nella quale eravamo, con una codebase non aggiornata, eravamo stati noi stessi e che l'effort per rimediare è assolutamente maggiore di quello necessario per mantenerla aggiornata costantemente.
 
-Facendo questo upgrade ho anche imparato molte cose, da comandi bash sconosciuti a come leggere le upgrade guide dei vendor, da come gestire un task consi lungo assieme a tutte le altre mansioni necessario a come non mollare un task che sembra non aver fine ma che poi, dopo 20 mesi, finisce.
+Facendo questo upgrade ho anche imparato molte cose: da comandi bash sconosciuti a come leggere le upgrade guide dei vendor, da come gestire un task così lungo assieme a tutte le altre mansioni necessarie a come non mollare un task che sembra non aver fine ma che poi, dopo 20 mesi, finisce.
